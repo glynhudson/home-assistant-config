@@ -1,0 +1,118 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: 00.14286
+  longitude: 00.15401
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 100
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/London
+  # Customization file
+  customize: !include customize.yaml
+
+# Show links to resources in log and frontend
+#introduction:
+
+# Enables the frontend
+frontend:
+  javascript_version: latest
+
+# Enables configuration UI
+config:
+
+http:
+  # Uncomment this to add a password (recommended!)
+  api_password: XXXXXXXX
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  # base_url: example.duckdns.org:8123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Track the sun
+sun:
+
+
+# Text to speech
+tts:
+  - platform: google
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+
+
+device_tracker:
+  - platform: nmap_tracker
+    hosts: 192.168.1.0/24
+    home_interval: 10
+    track_new_devices: no
+    exclude:
+     - 192.168.1.105
+     - 192.168.1.1
+     - 192.168.1.110
+     - 192.168.1.104
+     - 192.168.1.102
+     - 192.168.1.114
+     - 192.168.1.115
+
+mqtt:
+  broker: emonpi.home
+  port: 1883
+  client_id: home-assistant
+  keepalive: 60
+  username: XXXXXX
+  password: XXXXXX
+  
+
+sensor:
+  - platform: yr
+  
+  - platform: mqtt
+    name: "House Power"
+    state_topic: "emon/emonpi/power1"
+    unit_of_measurement: "W"
+  
+  - platform: mqtt
+    name: "EV Power"
+    state_topic: "emon/emonpi/power2"
+    unit_of_measurement: "W"
+  
+  - platform: mqtt
+    name: "Indoor"
+    state_topic: "emon/emonth5/temperature"
+    unit_of_measurement: '°C'
+  
+  - platform: mqtt
+    name: "Oudoor"
+    state_topic: "emon/weather/temp"
+    unit_of_measurement: '°C'
+    
+notify:
+  - name: pushover
+    platform: pushover
+    api_key: XXXXXXXXXXXXXXXXXXXXx
+    user_key: XXXXXXXXXXXXXXXXXXXXx
+    
+#logger:

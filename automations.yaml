@@ -1,0 +1,98 @@
+- alias: 'Arrive home turn on lights'
+  trigger:
+    platform: state
+    entity_id: device_tracker.X, device_tracker.Y
+    to: 'home'
+  condition:
+    condition: sun
+    after: sunset
+    after_offset: "-1:00:00"
+  action:
+    # - service: notify.pushover
+    #   data_template:
+    #     title: Home
+    #     message: >
+    #       {{ trigger.to_state.attributes.friendly_name }} has arrived.
+    - service: homeassistant.turn_on
+      data:
+        entity_id: light.reading_light
+        
+    - service: homeassistant.turn_on
+      data:
+        entity_id: light.desk_lamp
+        
+    - service: homeassistant.turn_on
+      data:
+        entity_id: light.projector_light
+    - service: homeassistant.turn_on
+      data:
+        entity_id: light.kitchen_light
+    - delay: 0:01
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.Home
+        volume_level: "0.4"
+    - service: tts.google_say
+      data_template:
+        entity_id: media_player.Home
+        language: en
+        message: >
+          Welcome home {{ trigger.to_state.attributes.friendly_name }}. The temperature in living room is currently {{ states.sensor.indoor.state_with_unit }}
+ 
+ 
+ 
+   
+- alias: 'Heat on cold arrival'
+  trigger:
+    platform: state
+    entity_id: device_tracker.X, device_tracker.Y
+    to: 'home'
+  condition:
+    condition: numeric_state
+    entity_id: sensor.indoor
+    below: 15
+  action:
+    - service: homeassistant.turn_on
+      data:
+        entity_id: light.heating
+    - delay: 0:01
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.Home
+        volume_level: "0.4"
+    - service: tts.google_say
+      data:
+        entity_id: media_player.Home
+        language: en
+        message: >
+          It's cold, heating has been turned on. The temperature in living room is currently {{ states.sensor.indoor.state_with_unit }}.
+  
+  
+        
+- alias: "Nobody home: all off"
+  trigger:
+    platform: state
+    entity_id: group.all_devices
+    to: 'not_home'
+  action:
+    - service: notify.pushover
+      data:
+        title: "Nobody home"
+        message: "Everyting has been turned off"
+    - service: homeassistant.turn_off
+      data:
+        entity_id: light.reading_light
+    - service: homeassistant.turn_off
+      data:
+        entity_id: light.desk_lamp
+    - service: homeassistant.turn_off
+      data:
+        entity_id: light.projector_light
+    - service: homeassistant.turn_off
+      data:
+        entity_id: light.kitchen_light
+    - service: homeassistant.turn_off
+      data:
+        entity_id: light.heating
+        
+  

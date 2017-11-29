@@ -1,0 +1,23 @@
+  downstairs:
+    name: Downstairs
+    view: yes
+    entities:
+      - light.reading_light
+      - light.desk_lamp
+      - light.projector_light
+      - light.kitchen_light
+
+
+  upstaris:
+    name: Upstairs
+    view: yes
+    entities:
+      - light.bedroom_light
+      - light.electric_blanket
+
+  automation_view:
+    name: Automation
+    view: yes
+    entities:
+      - group.all_automations
+      - group.all_scripts

@@ -1,0 +1,18 @@
+X:
+  hide_if_away: false
+  icon:
+  mac: xxxxxxxxxxxxxxxxxx
+  name: X
+  gravatar: "xxx@xxx.com"
+  picture:
+  track: true
+  vendor: unknown
+  
+Y:
+  hide_if_away: false
+  icon:
+  mac: xxxxxxxxxxxxxxxxxxx
+  name: Y
+  picture: "http://xxx.xx.jpg"
+  track: true
+  vendor: unknown
